@@ -1,5 +1,2 @@
-artifacts\bin\
-artifacts\obj\
-work\
-results\
-
+/artifacts/
+/work/
