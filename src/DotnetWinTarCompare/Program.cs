@@ -9,16 +9,16 @@ internal static class Program
         if (args.Length != 3)
         {
             Console.Error.WriteLine(
-                "Usage: DotnetWinTarCompare <managed|native> <archive.tar[.gz]> <target-directory>");
+                "Usage: DotnetWinTarCompare <dotnet|windows-tar> <archive.tar[.gz]> <target-directory>");
             return 2;
         }
 
         ITarArchiveExtractor extractor = args[0].ToLowerInvariant() switch
         {
-            "managed" => new DotnetTarArchiveExtractor(),
-            "native" => new WindowsNativeTarArchiveExtractor(),
+            "dotnet" => new DotnetTarArchiveExtractor(),
+            "windows-tar" => new WindowsTarArchiveExtractor(),
             _ => throw new ArgumentException(
-                $"Unknown extractor '{args[0]}'. Expected 'managed' or 'native'.",
+                $"Unknown extractor '{args[0]}'. Expected 'dotnet' or 'windows-tar'.",
                 nameof(args)),
         };
 

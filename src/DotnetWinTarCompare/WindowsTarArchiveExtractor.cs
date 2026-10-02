@@ -7,23 +7,26 @@ using System.Text;
 
 namespace DotnetWinTarCompare;
 
-internal sealed class WindowsNativeTarArchiveExtractor : ITarArchiveExtractor
+internal sealed class WindowsTarArchiveExtractor : ITarArchiveExtractor
 {
-    private const string TarExecutable = "tar.exe";
+    private static readonly string s_tarExecutable = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+        "System32",
+        "tar.exe");
     private const int MaximumStandardErrorLength = 16 * 1024;
 
     public void Extract(TarExtractionContext context)
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new PlatformNotSupportedException("The native comparison uses Windows tar.exe.");
+            throw new PlatformNotSupportedException("This comparison requires Windows tar.exe (bsdtar).");
         }
 
         Directory.CreateDirectory(context.TargetDirectory);
 
         var startInfo = new ProcessStartInfo
         {
-            FileName = TarExecutable,
+            FileName = s_tarExecutable,
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardInput = true,
@@ -41,13 +44,13 @@ internal sealed class WindowsNativeTarArchiveExtractor : ITarArchiveExtractor
         {
             if (!process.Start())
             {
-                throw new InvalidOperationException($"Failed to start '{TarExecutable}'.");
+                throw new InvalidOperationException($"Failed to start '{s_tarExecutable}'.");
             }
         }
         catch (Win32Exception ex)
         {
             throw new InvalidOperationException(
-                $"Failed to start trusted native TAR executable '{TarExecutable}'.",
+                $"Failed to start Windows tar.exe (bsdtar) at '{s_tarExecutable}'.",
                 ex);
         }
 
@@ -64,7 +67,7 @@ internal sealed class WindowsNativeTarArchiveExtractor : ITarArchiveExtractor
                 ? string.Empty
                 : $" Error output: {standardError.Trim()}";
             throw new InvalidOperationException(
-                $"'{TarExecutable}' exited with code {process.ExitCode}.{details}");
+                $"'{s_tarExecutable}' exited with code {process.ExitCode}.{details}");
         }
     }
 
