@@ -1,2 +1,4 @@
 /artifacts/
+/archives/*.tar
+/archives/*.tar.gz
 /work/

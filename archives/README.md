@@ -1,7 +1,12 @@
-# Local archive fixtures
+# Downloaded archive fixtures
 
-These files are retained locally so benchmark timing excludes download and
-decompression setup.
+`benchmark.ps1` resolves the pinned SDK and runtime assets from the official
+[.NET 11 release metadata](https://builds.dotnet.microsoft.com/dotnet/release-metadata/11.0/releases.json),
+downloads missing `.tar.gz` files, validates their published SHA-512 hashes,
+and generates the matching uncompressed `.tar` files.
+
+The downloaded and generated archives are ignored by Git. They are retained
+locally so benchmark timing excludes download and decompression setup.
 
 | Product | Version | Published archive SHA-512 |
 |---|---|---|
@@ -9,4 +14,3 @@ decompression setup.
 | .NET Runtime | `11.0.0-rc.1.26425.128` | `714ff8edc1b0f0ff9831439e38188182cc0cbc210d5119301395ebf80b63f490062cdd4c47c2c311a8541ef3b7774a735855e77649b57b34c668deed97914c66` |
 
 The `.tar` files are direct decompressions of their matching `.tar.gz` files.
-
