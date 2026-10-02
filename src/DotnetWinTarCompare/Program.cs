@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace DotnetWinTarCompare;
 
 internal static class Program
@@ -34,7 +36,10 @@ internal static class Program
         }
 
         Directory.CreateDirectory(targetDirectory);
+        var stopwatch = Stopwatch.StartNew();
         extractor.Extract(new TarExtractionContext(archivePath, targetDirectory));
+        stopwatch.Stop();
+        Console.WriteLine($"elapsed_ms={stopwatch.Elapsed.TotalMilliseconds:F3}");
         return 0;
     }
 }
